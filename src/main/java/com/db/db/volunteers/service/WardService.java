@@ -8,12 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service("wardService")
 public class WardService{
 
-    public Iterable<Ward> findByLocalGovs(int localGovId){
+    public Iterable<Ward> findByLocalGov(int localGovId){
         return wardRepository.findByLocalGovId(localGovId);
-    }
-
-    public Iterable<Ward> listAllWards(){
-        return wardRepository.findAll();
     }
 
     @Autowired

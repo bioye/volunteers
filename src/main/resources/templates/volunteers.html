@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+    table{width: 100%;}
+    table td, table th {border: 1px solid grey; text-align: left}
+    table th {background: #eee;}
+    .pagination-div{user-select: none;}
+    .pagination-div span{border-radius: 3px; border: 1px solid #999;
+        padding: 5px; margin: 10px 0px 0px 10px; display: inline-block}
+    span.selected{background: #ccf;}
+    .cell-right{text-align: right}
+    </style>
+</head>
+<body>
+    <h2>Volunteers</h2>
+    <form th:object="${form}" method="post">
+        <span>
+            <select th:field="*{groupId}">
+                <option th:each="group: ${groupList}"
+                        th:value="${group.id}"
+                        th:text="${group.name}">
+                </option>
+            </select>
+        </span>
+        <span>
+            <select th:field="*{localGovId}">
+                <option th:each="localGov: ${localGovs}"
+                        th:value="${localGov.id}"
+                        th:text="${localGov.name}">
+                </option>
+            </select>
+        </span>
+        <span>
+            <select th:field="*{wardId}">
+                <option th:each="ward: ${wards}"
+                        th:value="${ward.id}"
+                        th:text="${ward.name}">
+                </option>
+            </select>
+        </span>
+        <span>polling unit</span>
+        <input type="submit"/>
+    </form>
+    <!---->
+<table>
+<tr>
+    <th>#</th>
+    <th>Name</th>
+    <th class="cell-right">Phone No </th>
+    <th>Position</th>
+    <th>Code</th>
+</tr>
+<tr th:each="volunteer, i: ${volunteersPage.content}">
+    <td th:text="${(volunteersPage.number*volunteersPage.size)+i.index+1}"></td>
+    <td th:text="${volunteer.name}"></td>
+    <td class="cell-right">
+        <span th:if="${!volunteer.phoneNo.equals('')}">
+            0<span th:text="${volunteer.phoneNo}"></span>
+        </span>
+    </td>
+    <td th:text="${volunteer.position}"></td>
+    <td th:text="${volunteer.code}"></td>
+</tr>
+</table>
+
+<div class="pagination-div">
+    <a th:href="@{/volunteers(page=0,size=${volunteersPage.size})}">First</a>
+    <span th:if="${volunteersPage.hasPrevious()}">
+        <a th:href="@{/volunteers(page=${volunteersPage.number-1},size=${volunteersPage.size})}">Previous</a>
+    </span>
+    Page<span th:text="${volunteersPage.number+1}"></span> of <span th:text="${volunteersPage.totalPages}"></span>
+    <!--
+    <th:block th:each="i: ${#numbers.sequence(0, volunteersPage.totalPages-1)}">
+        <span th:if="${volunteersPage.number==1}" class="selected">[[${i}+1]]</span>
+        <span th:unless="${volunteersPage.number-1}">
+            <a th:href="@{/volunteers(page=${volunteersPage.number},size=${volunteersPage.size})}">[[${i}+1]]</a>
+        </span>
+    </th:block>
+    -->
+    <span th:if="${volunteersPage.hasNext()}">
+        <a th:href="@{/volunteers(page=${volunteersPage.number+1},size=${volunteersPage.size})}">Next</a>
+    </span>
+    <a th:href="@{/volunteers(page=${volunteersPage.totalPages-1},size=${volunteersPage.size})}">Last</a>
+</div>
+</body>
+</html>

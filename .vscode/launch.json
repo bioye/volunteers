@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - VolunteerApplication",
+            "request": "launch",
+            "mainClass": "com.db.db.volunteers.VolunteerApplication",
+            "projectName": "volunteers"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DemoApplication",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "com.db.db.volunteers.DemoApplication",
+            "args": "",
+            "projectName": "volunteers"
+        }
+    ]
+}

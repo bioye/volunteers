@@ -17,7 +17,8 @@
     <h2>Volunteers</h2>
     <form th:object="${form}" method="post">
     <span>
-        <select th:field="*{groupId}">
+        <select th:field="*{groupId}" name="groupSelect" id="groupSelect">
+            <option value="0"></option>
             <option th:each="group: ${form.groupList}"
                     th:value="${group.id}"
                     th:text="${group.name}">
@@ -25,7 +26,8 @@
         </select>
     </span>
     <span>
-        <select th:field="*{localGovId}">
+        <select th:field="*{localGovId}" name="localGovSelect" id="localGovSelect">
+            <option value="0"></option>
             <option th:each="localGov: ${form.localGovs}"
                     th:value="${localGov.id}"
                     th:text="${localGov.name}">
@@ -33,7 +35,8 @@
         </select>
     </span>
     <span>
-        <select th:field="*{wardId}">
+        <select th:field="*{wardId}" name="wardSelect" id="wardSelect">
+            <option value="0"></option>
             <option th:each="ward: ${form.wards}"
                     th:value="${ward.id}"
                     th:text="${ward.code}">
@@ -41,7 +44,8 @@
         </select>
     </span>
     <span>
-        <select th:field="*{pollingUnitId}">
+        <select th:field="*{pollingUnitId}" name="pollingUnitSelect" id="pollingUnitSelect">
+            <option value="0"></option>
             <option th:each="pollingUnit: ${form.pollingUnits}"
                     th:value="${pollingUnit.id}"
                     th:text="${pollingUnit.code}">

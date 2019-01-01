@@ -11,7 +11,7 @@ public class PollingUnit{
 	public String getName() {
 		return name;
 	}
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 	public int getId() {
@@ -24,5 +24,5 @@ public class PollingUnit{
 	private Ward ward;
 	private String name;
 	@Column(name = "pu_id")
-	private String code;
+	private int code;
 }

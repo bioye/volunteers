@@ -13,7 +13,7 @@ public class Ward{
 	public String getName() {
 		return name;
 	}
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 	public LocalGov getLocalGov() {
@@ -26,5 +26,5 @@ public class Ward{
 	@ManyToOne
 	private LocalGov localGov;
 	private String name;
-	private String code;
+	private int code;
 }

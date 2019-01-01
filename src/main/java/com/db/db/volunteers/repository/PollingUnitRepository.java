@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface PollingUnitRepository extends CrudRepository<PollingUnit, Integer>{
     Iterable<PollingUnit> findByWard(Ward ward);
     Iterable<PollingUnit> findByWardId(int wardId);
+    Iterable<PollingUnit> findByWardCode(int code);
 }

@@ -1,9 +1,11 @@
 package com.db.db.volunteers.controller;
 
 import com.db.db.volunteers.model.Form;
+import com.db.db.volunteers.model.QVolunteer;
 import com.db.db.volunteers.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.querydsl.core.BooleanBuilder;
 
 @Controller
 @SessionAttributes({"form"})
@@ -33,23 +37,43 @@ public class VolunteerController{
     public ModelAndView list(@PageableDefault(size=20, sort="name", 
                        direction=Sort.Direction.ASC) Pageable pageable, 
                        @ModelAttribute Form form, ModelAndView mv){
-        //if(form.getVolunteersPage()==null){
-            form.setGroupList(groupService.listAllGroups());
-            form.setLocalGovs(localGovService.listAllLocalGovs());
-            mv.setViewName("volunteers");
-        //}
+        form.setGroupList(groupService.listAllGroups());
+        form.setLocalGovs(localGovService.findByStateCode(27));
+        mv.setViewName("volunteers");
         form.setVolunteersPage(volunteerService.listAllVolunteers(pageable));
         return mv;
     }
 
     @PostMapping("/volunteers")
     public ModelAndView process(@ModelAttribute Form form, ModelAndView mv){
-        form.setWards(wardService.findByLocalGov(form.getLocalGovId()));
+        form.setWards(wardService.findByLocalGov(form.getLocalGovId()));//
         form.setPollingUnits(pollingUnitService.findByWard(form.getWardId()));
+        StringBuilder subCode = new StringBuilder("27-");
+        int groupId=form.getGroupId();
+        BooleanBuilder filterBuilder = new BooleanBuilder();
+        if(groupId!=0) filterBuilder.and(QVolunteer.volunteer.group.id.eq(groupId));
+        if(form.getLocalGovId()!=0){
+            subCode.append(String.format("%02d",localGovService.findLocalGov(
+                                                                form.getLocalGovId()).get().getCode()));
+            if(form.getWardId()!=0){
+                subCode.append("-");
+                subCode.append(String.format("%02d",wardService.findWard(
+                                                                form.getWardId()).get().getCode()));
+                if(form.getPollingUnitId()!=0){
+                    subCode.append("-");
+                    subCode.append(String.format("%03d",pollingUnitService.findPollingUnit(
+                                                                        form.getPollingUnitId()).get().getCode()));
+                }
+            }
+            filterBuilder.and(QVolunteer.volunteer.code.startsWith(subCode.toString()));
+        }
+        PageRequest page = PageRequest.of(form.getVolunteersPage().getNumber(), 
+                                               form.getVolunteersPage().getSize(),
+                                               new Sort(Sort.Direction.ASC,"name"));
+        form.setVolunteersPage(volunteerService.listAllVolunteers(filterBuilder, page));
         mv.setViewName("volunteers");
         return mv;
     }
-
     
     @ModelAttribute
     public Form form() {

@@ -46,7 +46,7 @@ public class VolunteerController{
 
     @PostMapping("/volunteers")
     public ModelAndView process(@ModelAttribute Form form, ModelAndView mv){
-        form.setWards(wardService.findByLocalGov(form.getLocalGovId()));//
+        form.setWards(wardService.findByLocalGov(form.getLocalGovId()));
         form.setPollingUnits(pollingUnitService.findByWard(form.getWardId()));
         StringBuilder subCode = new StringBuilder("27-");
         int groupId=form.getGroupId();

@@ -19,9 +19,10 @@ public class WardService{
         return wardRepository.findById(id);
     }
 
+    /*
     public Iterable<Ward> findByLocalGovCode(int code){
         return wardRepository.findByLocalGovCodeAndLocalGovStateCode(code, 27);
-    }
+    }*/
 
     @Autowired
     public WardService(WardRepository wardRepository){

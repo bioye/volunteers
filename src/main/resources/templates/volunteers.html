@@ -66,7 +66,7 @@
     <td th:text="${(form.volunteersPage.number*form.volunteersPage.size)+i.index+1}"></td>
     <td th:text="${volunteer.name}"></td>
     <td class="cell-right">
-        <span th:if="${!volunteer.phoneNo.equals('')}">
+        <span th:if="${!volunteer.phoneNo.trim().equals('')}">
             0<span th:text="${volunteer.phoneNo}"></span>
         </span>
     </td>

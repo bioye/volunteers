@@ -40,7 +40,10 @@ public class VolunteerController{
         form.setGroupList(groupService.listAllGroups());
         form.setLocalGovs(localGovService.findByStateCode(27));
         mv.setViewName("volunteers");
-        form.setVolunteersPage(volunteerService.listAllVolunteers(pageable));
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) builder=new BooleanBuilder();
+        else builder=form.getBuilder();
+        form.setVolunteersPage(volunteerService.listAllVolunteers(builder, pageable));
         return mv;
     }
 
@@ -56,20 +59,18 @@ public class VolunteerController{
             subCode.append(String.format("%02d",localGovService.findLocalGov(
                                                                 form.getLocalGovId()).get().getCode()));
             if(form.getWardId()!=0){
-                subCode.append("-");
-                subCode.append(String.format("%02d",wardService.findWard(
+                subCode.append("-").append(String.format("%02d",wardService.findWard(
                                                                 form.getWardId()).get().getCode()));
                 if(form.getPollingUnitId()!=0){
-                    subCode.append("-");
-                    subCode.append(String.format("%03d",pollingUnitService.findPollingUnit(
+                    subCode.append("-").append(String.format("%03d",pollingUnitService.findPollingUnit(
                                                                         form.getPollingUnitId()).get().getCode()));
                 }
             }
             filterBuilder.and(QVolunteer.volunteer.code.startsWith(subCode.toString()));
         }
-        PageRequest page = PageRequest.of(form.getVolunteersPage().getNumber(), 
-                                               form.getVolunteersPage().getSize(),
-                                               new Sort(Sort.Direction.ASC,"name"));
+        PageRequest page = PageRequest.of(0, form.getVolunteersPage().getSize(),
+                                             new Sort(Sort.Direction.ASC,"name"));
+        form.setBuilder(filterBuilder);
         form.setVolunteersPage(volunteerService.listAllVolunteers(filterBuilder, page));
         mv.setViewName("volunteers");
         return mv;

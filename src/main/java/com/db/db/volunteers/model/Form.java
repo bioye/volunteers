@@ -1,5 +1,6 @@
 package com.db.db.volunteers.model;
 
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 
 public class Form {
@@ -7,7 +8,14 @@ public class Form {
     public int getLocalGovId() {
         return localGovId;
     }
-    
+        
+    public BooleanBuilder getBuilder() {
+        return builder;
+    }
+    public void setBuilder(BooleanBuilder builder) {
+        this.builder = builder;
+    }
+
     public int getPollingUnitId() {
         return pollingUnitId;
     }
@@ -67,6 +75,7 @@ public class Form {
     public void setVolunteersPage(Page<Volunteer> volunteersPage) {
         this.volunteersPage = volunteersPage;
     }
+    
     private int localGovId;
     private int groupId;
     private int wardId;
@@ -76,4 +85,5 @@ public class Form {
     private Iterable<Ward> wards;
     private Iterable<PollingUnit> pollingUnits;
     private Page<Volunteer> volunteersPage;
+    private BooleanBuilder builder;
 }

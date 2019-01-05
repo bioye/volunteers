@@ -81,14 +81,6 @@
         <a th:href="@{/volunteers(page=${form.volunteersPage.number-1},size=${form.volunteersPage.size})}">Previous</a>
     </span>
     Page<span th:text="${form.volunteersPage.number+1}"></span> of <span th:text="${form.volunteersPage.totalPages}"></span>
-    <!--
-    <th:block th:each="i: ${#numbers.sequence(0, volunteersPage.totalPages-1)}">
-        <span th:if="${volunteersPage.number==1}" class="selected">[[${i}+1]]</span>
-        <span th:unless="${volunteersPage.number-1}">
-            <a th:href="@{/volunteers(page=${volunteersPage.number},size=${volunteersPage.size})}">[[${i}+1]]</a>
-        </span>
-    </th:block>
-    -->
     <span th:if="${form.volunteersPage.hasNext()}">
         <a th:href="@{/volunteers(page=${form.volunteersPage.number+1},size=${form.volunteersPage.size})}">Next</a>
     </span>

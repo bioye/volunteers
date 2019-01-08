@@ -13,10 +13,10 @@ public class Volunteer{
     public PollingUnit getPollingUnit() {
         return pollingUnit;
     }
-    /*
+    
     public Ward getWard() {
         return ward;
-    }*/
+    }
 
     public Group getGroup() {
         return group;
@@ -38,11 +38,10 @@ public class Volunteer{
     @ManyToOne
     @JoinFormula(referencedColumnName="pu_loc_id",
                  value="CONCAT('OG',REPLACE(SUBSTRING(code,3),'-',''))")
-    //convert from 27-01-02-003 to AB0102003
-	//@JoinColumn(name = "full_code_hyphen")
     private PollingUnit pollingUnit;
-    //@ManyToOne
-    //private Ward ward;
+    @ManyToOne
+    @JoinFormula(value="left(code,8)", referencedColumnName="fullCode")
+    private Ward ward;
     private String name;
     private String phoneNo;
     private String position;

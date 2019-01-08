@@ -41,7 +41,11 @@ public class VolunteerController{
         form.setLocalGovs(localGovService.findByStateCode(27));
         mv.setViewName("volunteers");
         BooleanBuilder builder = null;
-        if(form.getBuilder()==null) builder=new BooleanBuilder();
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();            
+            builder.and(QVolunteer.volunteer.name.trim().ne("")
+                                .or(QVolunteer.volunteer.phoneNo.trim().ne("")));
+        }
         else builder=form.getBuilder();
         form.setVolunteersPage(volunteerService.listAllVolunteers(builder, pageable));
         return mv;
@@ -67,6 +71,8 @@ public class VolunteerController{
                 }
             }
             filterBuilder.and(QVolunteer.volunteer.code.startsWith(subCode.toString()));
+            filterBuilder.and(QVolunteer.volunteer.name.trim().ne("")
+                                .or(QVolunteer.volunteer.phoneNo.trim().ne("")));
         }
         PageRequest page = PageRequest.of(0, form.getVolunteersPage().getSize(),
                                              new Sort(Sort.Direction.ASC,"name"));

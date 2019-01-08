@@ -72,9 +72,12 @@
     </td>
     <td th:text="${volunteer.position}"></td>
     <td>
-       <div th:if="${volunteer.pollingUnit != null}">
-            <span th:text="${volunteer.pollingUnit.name}"></span>
-       </div>
+        <div th:if="${volunteer.pollingUnit != null}">
+                PU: <span th:text="|${volunteer.pollingUnit.name}/${volunteer.code}|"></span>
+        </div>       
+        <div th:else>
+            Ward: <span th:text="|${volunteer.ward.name}/${volunteer.code}|"></span>
+        </div>
     </td>
 </tr>
 </table>

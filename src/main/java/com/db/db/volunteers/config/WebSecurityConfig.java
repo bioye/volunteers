@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     public UserDetailsService userDetailsService(){
         UserDetails user = User.withDefaultPasswordEncoder()
-            .username("bankole").password("adp2019").roles("USER").build();
+            .username("walebankole").password("p@ssw0rd").roles("USER").build();
         return new InMemoryUserDetailsManager(user);
     }
 }

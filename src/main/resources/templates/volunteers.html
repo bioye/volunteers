@@ -75,7 +75,7 @@
         <div th:if="${volunteer.pollingUnit != null}">
                 PU: <span th:text="|${volunteer.pollingUnit.name}/${volunteer.code}|"></span>
         </div>       
-        <div th:else>
+        <div th:if="${volunteer.ward != null}">
             Ward: <span th:text="|${volunteer.ward.name}/${volunteer.code}|"></span>
         </div>
     </td>

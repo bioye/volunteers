@@ -58,7 +58,9 @@ public class VolunteerController{
         StringBuilder subCode = new StringBuilder("27-");
         int groupId=form.getGroupId();
         BooleanBuilder filterBuilder = new BooleanBuilder();
-        if(groupId!=0) filterBuilder.and(QVolunteer.volunteer.group.id.eq(groupId));
+        if(groupId>0) filterBuilder.and(QVolunteer.volunteer.group.id.eq(groupId));/*
+        else if(groupId==-1) filterBuilder.and(QVolunteer.volunteer.group.name.ne("ADP"));
+        else if(groupId==-2) filterBuilder.and(QVolunteer.volunteer.group.name.eq("ADP"));*/ //non-political
         if(form.getLocalGovId()!=0){
             subCode.append(String.format("%02d",localGovService.findLocalGov(
                                                                 form.getLocalGovId()).get().getCode()));

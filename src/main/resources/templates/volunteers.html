@@ -18,7 +18,9 @@
     <form th:object="${form}" method="post">
     <span>
         <select th:field="*{groupId}" name="groupSelect" id="groupSelect">
-            <option value="0">ALL</option>
+            <option value="0">ALL</option><!--
+            <option value="-1">POLITICAL GROUPS</option>
+            <option value="-2">NON-POLITICAL GROUPS</option>-->
             <option th:each="group: ${form.groupList}"
                     th:value="${group.id}"
                     th:text="${group.name}">

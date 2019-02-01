@@ -11,10 +11,14 @@ public class Group{
     public String getName(){
         return name;
     }
-
-    public int getId(){
+    public String getType() {
+        return type;
+    }
+    public int getId() {
         return id;
     }
+
+    private String type;
     private String name;
     @Id
     private int id;

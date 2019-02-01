@@ -33,6 +33,29 @@ public class VolunteerController{
         this.pollingUnitService=pollingUnitService;
     }
 
+    @GetMapping("/pollingunitsimple")
+    public ModelAndView pollingUnits(Form form, ModelAndView mv){
+        mv.setViewName("pollingunitsimple");
+        form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer());
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats());
+        return mv;
+    }
+/*
+    @GetMapping("/pollingunits")
+    public ModelAndView pollingUnits(@PageableDefault(size=20, sort="name", 
+                                direction=Sort.Direction.ASC) Pageable pageable, 
+                                @ModelAttribute Form form, ModelAndView mv){
+        form.setLocalGovs(localGovService.findByStateCode(27));
+        mv.setViewName("pollingunits");
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnitVolunteerStatsPage(volunteerService.listPollingUnitVolunteerStats(builder, pageable));
+        return mv;
+    }*/
+
 	@GetMapping("/volunteers")
     public ModelAndView list(@PageableDefault(size=20, sort="name", 
                        direction=Sort.Direction.ASC) Pageable pageable, 

@@ -56,48 +56,63 @@
     </span>
     <input type="submit"/>
 </form>
-<table>
-<tr>
-    <th>#</th>
-    <th>Name</th>
-    <th class="cell-right">Phone No </th>
-    <th>Position</th>
-    <th>Code</th>
-    <th>Polling Station</th>
-    <th>Ward</th>
-    <th>Local Government</th>
-    <th>Group</th>
-</tr>
-<tr th:each="volunteer, i: ${form.volunteersPage.content}">
-    <td th:text="${(form.volunteersPage.number*form.volunteersPage.size)+i.index+1}"></td>
-    <td th:text="${volunteer.name}"></td>
-    <td class="cell-right">
-        <span th:if="${!volunteer.phoneNo.trim().equals('')}">
-            0<span th:text="${volunteer.phoneNo}"></span>
-        </span>
-    </td>
-    <td th:text="${volunteer.position}"></td>
-    <td style="white-space: nowrap;" th:text="${volunteer.code}"></td>
-    <td>
-        <div th:if="${volunteer.pollingUnit != null}">
-                <span th:text="${volunteer.pollingUnit.name}"></span>
-        </div>
-    </td>
-    <td>       
-        <div th:if="${volunteer.ward != null}">
-            <span th:text="${volunteer.ward.name}"></span>
-        </div>
-    </td>
-    <td>       
-        <div th:if="${volunteer.ward != null}">
-            <div th:if="${volunteer.ward.localGov != null}">
-                <span th:text="${volunteer.ward.localGov.name}"></span>
-            </div>
-        </div>
-    </td>
-    <td th:text="${volunteer.group.name}"></td>
-</tr>
-</table>
+<div>
+    <div>
+    
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th class="cell-right">Groups</th>
+                <th class="cell-right">Volunteers</th>
+            </tr>
+        </table>
+    </div>
+
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th class="cell-right">Phone No</th>
+            <th>Position</th>
+            <th>Code</th>
+            <th>Polling Station</th>
+            <th>Ward</th>
+            <th>Local Government</th>
+            <th>Group</th>
+        </tr>
+        <tr th:each="volunteer, i: ${form.volunteersPage.content}">
+            <td th:text="${(form.volunteersPage.number*form.volunteersPage.size)+i.index+1}"></td>
+            <td th:text="${volunteer.name}"></td>
+            <td class="cell-right">
+                <span th:if="${!volunteer.phoneNo.trim().equals('')}">
+                    0<span th:text="${volunteer.phoneNo}"></span>
+                </span>
+            </td>
+            <td th:text="${volunteer.position}"></td>
+            <td style="white-space: nowrap;" th:text="${volunteer.code}"></td>
+            <td>
+                <div th:if="${volunteer.pollingUnit != null}">
+                        <span th:text="${volunteer.pollingUnit.name}"></span>
+                </div>
+            </td>
+            <td>       
+                <div th:if="${volunteer.ward != null}">
+                    <span th:text="${volunteer.ward.name}"></span>
+                </div>
+            </td>
+            <td>       
+                <div th:if="${volunteer.ward != null}">
+                    <div th:if="${volunteer.ward.localGov != null}">
+                        <span th:text="${volunteer.ward.localGov.name}"></span>
+                    </div>
+                </div>
+            </td>
+            <td th:text="${volunteer.group.name}"></td>
+        </tr>
+    </table>
+</div>
 
 <div class="pagination-div">
     <a th:href="@{/volunteers(page=0,size=${form.volunteersPage.size})}">First</a>

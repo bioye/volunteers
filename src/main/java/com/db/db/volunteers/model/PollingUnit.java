@@ -17,7 +17,7 @@ public class PollingUnit implements Serializable{
 	}
 
 	public String getName() {
-		return name;
+		return name.trim();
 	}
 	public int getCode() {
 		return code;
@@ -32,7 +32,7 @@ public class PollingUnit implements Serializable{
 	private String fullCode;
 	@ManyToOne
 	private Ward ward;
-	@Column(name="description")
+	//@Column(name="description")
 	private String name;
 	@Column(name = "pu_id")
 	private int code;

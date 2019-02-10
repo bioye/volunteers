@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class GroupService{
 
     public Iterable<Group> listAllGroups(){
-        return groupRepository.findAll();
+        return groupRepository.findAllByOrderByNameAsc();
     }
 
     @Autowired

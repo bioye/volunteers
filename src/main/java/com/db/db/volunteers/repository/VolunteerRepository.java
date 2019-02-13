@@ -24,7 +24,8 @@ public interface VolunteerRepository extends PagingAndSortingRepository<Voluntee
     @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats("
             +"v.code, v.pollingUnit.name, v.pollingUnit.voters as votes, v.pollingUnit.points, count(v) as volunteers,"
              +"v.pollingUnit.ward.name as ward, v.pollingUnit.ward.localGov.name as localGov) from Volunteer v "
-            +"group by v.code, v.pollingUnit.name order by volunteers desc")
+            +"group by v.code, v.pollingUnit.name, v.pollingUnit.voters, v.pollingUnit.points, v.pollingUnit.ward.name,"
+            +" v.pollingUnit.ward.localGov.name order by volunteers desc")
     List<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount();
 
     @Query("select p from PollingUnit p where p.fullCode not in (select distinct v.pollingUnit.fullCode from Volunteer v)")

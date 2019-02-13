@@ -20,15 +20,23 @@
     <table>
         <tr>
             <th>#</th>
+            <th>Local Government</th>
+            <th>Ward</th>
             <th>Code</th>
             <th>Name</th>
             <th>Volunteers</th>
+            <th>Votes</th>
+            <th>Points</th>
         </tr>
         <tr th:each="pollingUnitStat, i: ${form.pollingUnitVolunteerStats}">
             <td th:text="${i.index+1}"></td>
+            <td th:text="${pollingUnitStat.localGov}"></td>
+            <td th:text="${pollingUnitStat.ward}"></td>
             <td style="white-space: nowrap;" th:text="${pollingUnitStat.code}"></td>
             <td th:text="${pollingUnitStat.name}"></td>
             <td style="white-space: nowrap;" th:text="${pollingUnitStat.volunteers}"></td>
+            <td th:text="${pollingUnitStat.votes}"></td>
+            <td th:text="${pollingUnitStat.points}"></td>
         </tr>
     </table>
 </div>
@@ -37,15 +45,33 @@
 <table>
     <tr>
         <th>#</th>
+        <th>Local Government</th>
+        <th>Ward</th>
         <th>Code</th>
         <th>Name</th>
         <th>Volunteers</th>
+        <th>Votes</th>
+        <th>Points</th>
     </tr>
     <tr th:each="pollingUnit, i: ${form.pollingUnits}">
         <td th:text="${i.index+1}"></td>
+        <td>       
+            <div th:if="${pollingUnit.ward != null}">
+                <div th:if="${pollingUnit.ward.localGov != null}">
+                    <span th:text="${pollingUnit.ward.localGov.name}"></span>
+                </div>
+            </div>
+        </td>
+        <td>       
+            <div th:if="${pollingUnit.ward != null}">
+                <span th:text="${pollingUnit.ward.name}"></span>
+            </div>
+        </td>
         <td style="white-space: nowrap;" th:text="${pollingUnit.fullCode}"></td>
         <td th:text="${pollingUnit.name}"></td>
         <td style="white-space: nowrap;">0</td>
+        <td th:text="${pollingUnit.votes}"></td>
+        <td th:text="${pollingUnit.points}"></td>
     </tr>
 </table>
 </div>

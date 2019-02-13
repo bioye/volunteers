@@ -38,11 +38,11 @@ public class VolunteerService{
     }*/
 
     public Page<Volunteer> listAllVolunteers(Pageable page){
-        return volunteerRepository.findAll(page);
+        return volunteerRepository.findAll(page);//ByOrderByNameAsc
     }
 
     public Page<Volunteer> listAllVolunteers(BooleanBuilder builder, Pageable page){
-        return volunteerRepository.findAll(builder, page);
+        return volunteerRepository.findAll(builder, page);//ByOrderByNameAsc
     }
     private VolunteerRepository volunteerRepository;
 }

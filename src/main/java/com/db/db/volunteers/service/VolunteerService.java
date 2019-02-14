@@ -21,6 +21,22 @@ public class VolunteerService{
         this.volunteerRepository = volunteerRepository;
     }
 
+    public Page<PollingUnit> listPollingUnitWithNoVolunteer(BooleanBuilder builder, Pageable page){
+        return volunteerRepository.findPollingUnitsWithNoVolunteers(builder, page);
+    }
+
+    public Page<PollingUnit> listPollingUnitWithNoVolunteer(Pageable page){
+        return volunteerRepository.findPollingUnitsWithNoVolunteers(page);
+    }
+
+    public Page<PollingUnitVolunteerStats> listPollingUnitVolunteerStats(BooleanBuilder builder, Pageable page){
+        return volunteerRepository.findPollingUnitsByVolunteerCount(builder, page);
+    }
+
+    public Page<PollingUnitVolunteerStats> listPollingUnitVolunteerStats(Pageable page){
+        return volunteerRepository.findPollingUnitsByVolunteerCount(page);
+    }
+
     public List<PollingUnit> listPollingUnitWithNoVolunteer(){
         return volunteerRepository.findPollingUnitsWithNoVolunteers();
     }

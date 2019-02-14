@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+    table{width: 100%;}
+    table td, table th {border: 1px solid grey; text-align: left}
+    table th {background: #eee;}
+    .pagination-div{user-select: none;}
+    .pagination-div span{border-radius: 3px; border: 1px solid #999;
+        padding: 5px; margin: 10px 0px 0px 10px; display: inline-block}
+    span.selected{background: #ccf;}
+    .cell-right{text-align: right}
+    </style>
+</head>
+<body>
+    <h2>Polling Units with Volunteers</h2>
+<div>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>
+                <a th:href="@{?sort=pollingUnit.ward.localGov.name,asc}">Local Government</a></th>
+            <th>
+                <a th:href="@{?sort=pollingUnit.ward.name,asc}">Ward</a>
+            </th>
+            <th>
+                <a th:href="@{?sort=code,asc}">Code</a>
+            </th>
+            <th>
+                <a th:href="@{?sort=pollingUnit.name,asc}">Name</a>
+            </th>
+            <th>
+                <a th:href="@{?sort=volunteers,desc}">Volunteers</a></th>
+            <th>
+                <a th:href="@{?sort=pollingUnit.voters,desc}">Votes</a></th>
+            <th>
+                <a th:href="@{?sort=pollingUnit.points,desc}">Points</a></th>
+        </tr>
+        <tr th:each="pollingUnitStat, i: ${form.pollingUnitVolunteerStats}">
+            <td th:text="${i.index+1}"></td>
+            <td th:text="${pollingUnitStat.localGov}"></td>
+            <td th:text="${pollingUnitStat.ward}"></td>
+            <td style="white-space: nowrap;" th:text="${pollingUnitStat.code}"></td>
+            <td th:text="${pollingUnitStat.name}"></td>
+            <td style="white-space: nowrap;" th:text="${pollingUnitStat.volunteers}"></td>
+            <td th:text="${pollingUnitStat.votes}"></td>
+            <td th:text="${pollingUnitStat.points}"></td>
+        </tr>
+    </table>
+</div><!--
+<h2>Polling Units with No Volunteers</h2>
+<div>
+<table>
+    <tr>
+        <th>#</th>
+        <th>Local Government</th>
+        <th>Ward</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Volunteers</th>
+        <th>Votes</th>
+        <th>Points</th>
+    </tr>
+    <tr th:each="pollingUnit, i: ${form.pollingUnits}">
+        <td th:text="${i.index+1}"></td>
+        <td>       
+            <div th:if="${pollingUnit.ward != null}">
+                <div th:if="${pollingUnit.ward.localGov != null}">
+                    <span th:text="${pollingUnit.ward.localGov.name}"></span>
+                </div>
+            </div>
+        </td>
+        <td>       
+            <div th:if="${pollingUnit.ward != null}">
+                <span th:text="${pollingUnit.ward.name}"></span>
+            </div>
+        </td>
+        <td style="white-space: nowrap;" th:text="${pollingUnit.fullCode}"></td>
+        <td th:text="${pollingUnit.name}"></td>
+        <td style="white-space: nowrap;">0</td>
+        <td th:text="${pollingUnit.votes}"></td>
+        <td th:text="${pollingUnit.points}"></td>
+    </tr>
+</table>
+</div>-->
+</body>
+</html>

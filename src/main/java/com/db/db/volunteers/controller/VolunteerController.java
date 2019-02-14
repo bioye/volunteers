@@ -5,6 +5,7 @@ import com.db.db.volunteers.model.QVolunteer;
 import com.db.db.volunteers.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,11 +34,55 @@ public class VolunteerController{
         this.pollingUnitService=pollingUnitService;
     }
 
-    @GetMapping("/pollingunitsimple")
-    public ModelAndView pollingUnits(Form form, ModelAndView mv){
-        mv.setViewName("pollingunitsimple");
+    @GetMapping("/pollingunitsfilled")
+    public ModelAndView pollingUnits(
+            @PageableDefault(size=Integer.MAX_VALUE, sort="pollingUnit.ward.localGov.name",direction=Sort.Direction.ASC) 
+            Pageable pageable, 
+            @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitsfilled");
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats(builder, pageable));
+        return mv;
+    }
+
+    @GetMapping("/pollingunitszero")
+    public ModelAndView pollingUnitsZero(
+            @PageableDefault(size=Integer.MAX_VALUE, sort="ward.localGov.name",direction=Sort.Direction.ASC) 
+            Pageable pageable, @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitszero");
+        form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer(builder, pageable));
+        return mv;
+    }
+
+    @GetMapping("/pollingunitsimplehidden")
+    public ModelAndView pollingunitsimple(
+            @PageableDefault(direction=Sort.Direction.ASC) 
+            //@Qualifier("nonZero") 
+            Pageable pageable0, 
+            //@PageableDefault(size=10, sort="name", direction=Sort.Direction.ASC) 
+            //@Qualifier("zero") Pageable pageable1,
+            @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitsimplehidden");
         form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer());
         form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats(builder, pageable0));
+        //form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer(builder, pageable1));
         return mv;
     }
 /*

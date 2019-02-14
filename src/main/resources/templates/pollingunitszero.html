@@ -15,43 +15,27 @@
     </style>
 </head>
 <body>
-    <h2>Polling Units with Volunteers</h2>
-<div>
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Local Government</th>
-            <th>Ward</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Volunteers</th>
-            <th>Votes</th>
-            <th>Points</th>
-        </tr>
-        <tr th:each="pollingUnitStat, i: ${form.pollingUnitVolunteerStats}">
-            <td th:text="${i.index+1}"></td>
-            <td th:text="${pollingUnitStat.localGov}"></td>
-            <td th:text="${pollingUnitStat.ward}"></td>
-            <td style="white-space: nowrap;" th:text="${pollingUnitStat.code}"></td>
-            <td th:text="${pollingUnitStat.name}"></td>
-            <td style="white-space: nowrap;" th:text="${pollingUnitStat.volunteers}"></td>
-            <td th:text="${pollingUnitStat.votes}"></td>
-            <td th:text="${pollingUnitStat.points}"></td>
-        </tr>
-    </table>
-</div>
 <h2>Polling Units with No Volunteers</h2>
 <div>
 <table>
     <tr>
         <th>#</th>
-        <th>Local Government</th>
-        <th>Ward</th>
-        <th>Code</th>
-        <th>Name</th>
+        <th>
+            <a th:href="@{?sort=ward.localGov.name,asc}">Local Government</a></th>
+        <th>
+            <a th:href="@{?sort=ward.name,asc}">Ward</a>
+        </th>
+        <th>
+            <a th:href="@{?sort=code,asc}">Code</a>
+        </th>
+        <th>
+            <a th:href="@{?sort=name,asc}">Name</a>
+        </th>
         <th>Volunteers</th>
-        <th>Votes</th>
-        <th>Points</th>
+        <th>
+            <a th:href="@{?sort=voters,desc}">Votes</a></th>
+        <th>
+            <a th:href="@{?sort=points,desc}">Points</a></th>
     </tr>
     <tr th:each="pollingUnit, i: ${form.pollingUnits}">
         <td th:text="${i.index+1}"></td>

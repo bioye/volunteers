@@ -1,5 +1,7 @@
 package com.db.db.volunteers.controller;
 
+import java.util.Optional;
+
 import com.db.db.volunteers.model.Form;
 import com.db.db.volunteers.model.QVolunteer;
 import com.db.db.volunteers.service.*;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,11 +36,55 @@ public class VolunteerController{
         this.pollingUnitService=pollingUnitService;
     }
 
-    @GetMapping("/pollingunitsimple")
-    public ModelAndView pollingUnits(Form form, ModelAndView mv){
-        mv.setViewName("pollingunitsimple");
+    @GetMapping("/pollingunitsfilled")
+    public ModelAndView pollingUnits(
+            @PageableDefault(size=Integer.MAX_VALUE, sort="pollingUnit.ward.localGov.name",direction=Sort.Direction.ASC) 
+            Pageable pageable, 
+            @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitsfilled");
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats(builder, pageable));
+        return mv;
+    }
+
+    @GetMapping("/pollingunitszero")
+    public ModelAndView pollingUnitsZero(
+            @PageableDefault(size=Integer.MAX_VALUE, sort="ward.localGov.name",direction=Sort.Direction.ASC) 
+            Pageable pageable, @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitszero");
+        form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer(builder, pageable));
+        return mv;
+    }
+
+    @GetMapping("/pollingunitsimplehidden")
+    public ModelAndView pollingunitsimple(
+            @PageableDefault(direction=Sort.Direction.ASC) 
+            //@Qualifier("nonZero") 
+            Pageable pageable0, 
+            //@PageableDefault(size=10, sort="name", direction=Sort.Direction.ASC) 
+            //@Qualifier("zero") Pageable pageable1,
+            @ModelAttribute Form form, ModelAndView mv){
+        mv.setViewName("pollingunitsimplehidden");
         form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer());
         form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats());
+        BooleanBuilder builder = null;
+        if(form.getBuilder()==null) {
+            builder=new BooleanBuilder();  
+        }
+        else builder=form.getBuilder();
+        form.setPollingUnitVolunteerStats(volunteerService.listPollingUnitVolunteerStats(builder, pageable0));
+        //form.setPollingUnits(volunteerService.listPollingUnitWithNoVolunteer(builder, pageable1));
         return mv;
     }
 /*
@@ -59,6 +106,8 @@ public class VolunteerController{
 	@GetMapping("/volunteers")
     public ModelAndView list(@PageableDefault(size=20, sort="name", 
                        direction=Sort.Direction.ASC) Pageable pageable, 
+                       @RequestParam("sortBy") Optional<String> sortBy, 
+                       @RequestParam("sortDirection") Optional<Sort.Direction> sortDirection,
                        @ModelAttribute Form form, ModelAndView mv){
         form.setGroupList(groupService.listAllGroups());
         form.setLocalGovs(localGovService.findByStateCode(27));
@@ -70,7 +119,14 @@ public class VolunteerController{
                                 .or(QVolunteer.volunteer.phoneNo.trim().ne("")));
         }
         else builder=form.getBuilder();
-        form.setVolunteersPage(volunteerService.listAllVolunteers(builder, pageable));
+        Pageable madePage = pageable;
+        if(sortBy.isPresent() &&sortDirection.isPresent()) 
+            madePage = PageRequest.of(form.getVolunteersPage().getNumber(), 20, 
+            sortDirection.get(), sortBy.get());
+        else if(form.getVolunteersPage()!=null) 
+            madePage = PageRequest.of(pageable.getPageNumber(), 20, 
+                form.getVolunteersPage().getSort());
+        form.setVolunteersPage(volunteerService.listAllVolunteers(builder, madePage));
         return mv;
     }
 
@@ -82,8 +138,8 @@ public class VolunteerController{
         int groupId=form.getGroupId();
         BooleanBuilder filterBuilder = new BooleanBuilder();
         if(groupId>0) filterBuilder.and(QVolunteer.volunteer.group.id.eq(groupId));
-        else if(groupId==-1) filterBuilder.and(QVolunteer.volunteer.group.name.ne("ADP"));
-        else if(groupId==-2) filterBuilder.and(QVolunteer.volunteer.group.name.eq("ADP")); //political
+        else if(groupId==-1) filterBuilder.and(QVolunteer.volunteer.group.type.eq(1));
+        else if(groupId==-2) filterBuilder.and(QVolunteer.volunteer.group.type.eq(2)); //political
         if(form.getLocalGovId()!=0){
             subCode.append(String.format("%02d",localGovService.findLocalGov(
                                                                 form.getLocalGovId()).get().getCode()));

@@ -19,8 +19,8 @@
     <span>
         <select th:field="*{groupId}" name="groupSelect" id="groupSelect">
             <option value="0">ALL</option>
-            <option value="-2">POLITICAL GROUPS</option>
-            <option value="-1">NON-POLITICAL GROUPS</option>
+            <option value="-1">POLITICAL GROUPS</option>
+            <option value="-2">NON-POLITICAL GROUPS</option>
             <option th:each="group: ${form.groupList}"
                     th:value="${group.id}"
                     th:text="${group.name}">
@@ -57,8 +57,8 @@
     <input type="submit"/>
 </form>
 <div>
-    <div>
-    
+    <!--
+    <div>    
         <table>
             <tr>
                 <th>#</th>
@@ -68,19 +68,28 @@
             </tr>
         </table>
     </div>
-
+    -->
 
     <table>
         <tr>
             <th>#</th>
-            <th>Name</th>
-            <th class="cell-right">Phone No</th>
-            <th>Position</th>
-            <th>Code</th>
-            <th>Polling Station</th>
-            <th>Ward</th>
-            <th>Local Government</th>
-            <th>Group</th>
+            <th>
+                <a th:href="@{/volunteers?sortBy=name&sortDirection=ASC}">Name</a>
+            </th>
+            <th class="cell-right">
+                <a th:href="@{?sortBy=phoneNo&sortDirection=ASC}">Phone No</a></th>
+            <th>
+                <a th:href="@{?sortBy=position&sortDirection=ASC}">Position</a></th>
+            <th>
+                <a th:href="@{?sortBy=code&sortDirection=ASC}">Code</a></th>
+            <th>
+                <a th:href="@{?sortBy=pollingUnit.name&sortDirection=ASC}">Polling Station</a></th>
+            <th>
+                <a th:href="@{?sortBy=ward.name&sortDirection=ASC}">Ward</a></th>
+            <th>
+                <a th:href="@{?sortBy=ward.localGov.name&sortDirection=ASC}">Local Government</a></th>
+            <th>
+                <a th:href="@{?sortBy=group&sortDirection=ASC}">Group</a></th>
         </tr>
         <tr th:each="volunteer, i: ${form.volunteersPage.content}">
             <td th:text="${(form.volunteersPage.number*form.volunteersPage.size)+i.index+1}"></td>

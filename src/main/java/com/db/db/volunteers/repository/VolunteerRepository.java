@@ -22,26 +22,41 @@ public interface VolunteerRepository extends PagingAndSortingRepository<Voluntee
     Volunteer findByPhoneNo(String phoneNo);
 
     @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats("
-            +"v.code, v.pollingUnit.name, count(v) as volunteers) from Volunteer v "
-            +"group by v.code, v.pollingUnit.name order by volunteers desc")
+            +"v.code, v.pollingUnit.name, v.pollingUnit.voters as votes, v.pollingUnit.points, count(v) as volunteers,"
+             +"v.pollingUnit.ward.name as ward, v.pollingUnit.ward.localGov.name as localGov) from Volunteer v "
+            +"group by v.code, v.pollingUnit.name, v.pollingUnit.voters, v.pollingUnit.points, v.pollingUnit.ward.name,"
+            +" v.pollingUnit.ward.localGov.name")
     List<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount();
+
+    @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats("
+            +"v.code, v.pollingUnit.name as name, v.pollingUnit.voters as votes, v.pollingUnit.points, count(v) as volunteers,"
+             +"v.pollingUnit.ward.name as ward, v.pollingUnit.ward.localGov.name as localGov) from Volunteer v "
+            +"group by v.code, v.pollingUnit.name, v.pollingUnit.voters, v.pollingUnit.points, v.pollingUnit.ward.name,"
+            +" v.pollingUnit.ward.localGov.name")
+    Page<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount(BooleanBuilder builder, Pageable page);
+
+    @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats("
+            +"v.code, v.pollingUnit.name, v.pollingUnit.voters as votes, v.pollingUnit.points, count(v) as volunteers,"
+             +"v.pollingUnit.ward.name as ward, v.pollingUnit.ward.localGov.name as localGov) from Volunteer v "
+            +"group by v.code, v.pollingUnit.name, v.pollingUnit.voters, v.pollingUnit.points, v.pollingUnit.ward.name,"
+            +" v.pollingUnit.ward.localGov.name")
+    Page<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount(Pageable page);
 
     @Query("select p from PollingUnit p where p.fullCode not in (select distinct v.pollingUnit.fullCode from Volunteer v)")
     List<PollingUnit> findPollingUnitsWithNoVolunteers();
 
-    /*
-    @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats(pu.name, v.code, count(v) as volunteers) from Volunteer v, PollingUnit pu "
-            +"where v.code=pu.fullCode group by pu.fullCode order by volunteers desc")
-    List<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount();
-                                               
-    @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats(pu.name, v.code, count(v) as volunteers) from volunteer v, polling_unit pu "
-            +"where v.code=pu.code group by pu.code order by volunteers desc")
-    Page<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount(BooleanBuilder builder, Pageable page);
+    @Query("select p from PollingUnit p where p.fullCode not in (select distinct v.pollingUnit.fullCode from Volunteer v)")
+    Page<PollingUnit> findPollingUnitsWithNoVolunteers(BooleanBuilder builder, Pageable page);
 
-    @Query("select new com.db.db.volunteers.model.PollingUnitVolunteerStats(pu.name, v.code, count(v)) from volunteer v, polling_unit pu "
-    +"where v.code=pu.code group by pu.code order by volunteers desc")
-    Page<PollingUnitVolunteerStats> findPollingUnitsByVolunteerCount(Pageable page);
-    */
+    @Query("select p from PollingUnit p where p.fullCode not in (select distinct v.pollingUnit.fullCode from Volunteer v)")
+    Page<PollingUnit> findPollingUnitsWithNoVolunteers(Pageable page);
+    
+    public Page<Volunteer> findAllByOrderByNameAsc(Pageable page);//
+    public Page<Volunteer> findAllByOrderByNameAsc(BooleanBuilder builder, Pageable page);//
+    public List<Volunteer> findAllByOrderByNameAsc();
+
+
+    
 
     //@Query("select count(v.group.name) from volunteer v group by v.group where substring(v.code, 3)==lg.code")
     //Iterable<Group> findGroups();

@@ -109,8 +109,10 @@ public class VolunteerController{
                        @RequestParam("sortBy") Optional<String> sortBy, 
                        @RequestParam("sortDirection") Optional<Sort.Direction> sortDirection,
                        @ModelAttribute Form form, ModelAndView mv){
-        form.setGroupList(groupService.listAllGroups());
-        form.setLocalGovs(localGovService.findByStateCode(27));
+        if(form.getGroupList()==null)
+            form.setGroupList(groupService.listAllGroups());
+        if(form.getLocalGovs()==null)
+            form.setLocalGovs(localGovService.findByStateCode(27));
         mv.setViewName("volunteers");
         BooleanBuilder builder = null;
         if(form.getBuilder()==null) {
@@ -120,11 +122,16 @@ public class VolunteerController{
         }
         else builder=form.getBuilder();
         Pageable madePage = pageable;
-        if(sortBy.isPresent() &&sortDirection.isPresent()) 
-            madePage = PageRequest.of(form.getVolunteersPage().getNumber(), 20, 
-            sortDirection.get(), sortBy.get());
+
+        if(form.getVolunteersPage()==null){
+            madePage=pageable;
+        }
+        else if(sortBy.isPresent() &&sortDirection.isPresent()) 
+            madePage = PageRequest.of(form.getVolunteersPage().getNumber(), 
+                                      form.getVolunteersPage().getSize(),
+                                      sortDirection.get(), sortBy.get());
         else if(form.getVolunteersPage()!=null) 
-            madePage = PageRequest.of(pageable.getPageNumber(), 20, 
+            madePage = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), 
                 form.getVolunteersPage().getSort());
         form.setVolunteersPage(volunteerService.listAllVolunteers(builder, madePage));
         return mv;
